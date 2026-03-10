@@ -110,7 +110,7 @@
         }
     };
 
-    // === 動態注入 CSS 樣式 ===
+    // === 動態注入響應式 CSS 樣式 ===
     const style = document.createElement('style');
     style.innerHTML = `
         #lixiang-game-app {
@@ -118,11 +118,13 @@
             background-color: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
-            padding: 30px;
-            max-width: 600px;
+            box-sizing: border-box; /* 避免 padding 撐破寬度 */
+            width: 92%; /* 預設適應父容器寬度，留邊界 */
+            max-width: 600px; /* 電腦版最大寬度限制 */
             margin: 20px auto;
+            padding: 30px;
             text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             color: #333;
         }
         #lixiang-game-app h3 {
@@ -130,13 +132,20 @@
             margin-top: 0;
             padding-bottom: 15px;
             border-bottom: 2px solid #edf2f7;
-            font-size: 1.5em;
+            font-size: 1.5rem;
+            line-height: 1.4;
         }
         #lixiang-story-text {
-            font-size: 1.1em;
+            font-size: 1.15rem;
             line-height: 1.6;
             margin: 25px 0;
             min-height: 80px;
+            word-wrap: break-word; /* 防止長單字破版 */
+        }
+        .lixiang-options-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px; /* 按鈕間的呼吸空間 */
         }
         .lixiang-btn {
             display: block;
@@ -144,22 +153,48 @@
             background-color: #4CAF50;
             color: white;
             border: none;
-            padding: 14px 20px;
-            margin: 10px 0;
+            padding: 16px 20px; /* 加大高度，方便手指點擊 */
             border-radius: 8px;
-            font-size: 1em;
+            font-size: 1.05rem;
+            line-height: 1.4;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, transform 0.1s ease;
             box-sizing: border-box;
+            white-space: normal; /* 允許過長文字自動換行 */
         }
         .lixiang-btn:hover {
             background-color: #45a049;
+        }
+        .lixiang-btn:active {
+            transform: scale(0.98); /* 手機點擊時的下壓微回饋 */
         }
         .lixiang-btn-restart {
             background-color: #e53e3e;
         }
         .lixiang-btn-restart:hover {
             background-color: #c53030;
+        }
+
+        /* --- 手機版專屬響應式調整 (Media Query) --- */
+        @media screen and (max-width: 480px) {
+            #lixiang-game-app {
+                width: 95%; /* 手機上進一步放大佔比 */
+                padding: 20px 15px; /* 縮小內部留白 */
+                margin: 15px auto;
+            }
+            #lixiang-game-app h3 {
+                font-size: 1.35rem; /* 稍微縮小標題 */
+                padding-bottom: 12px;
+            }
+            #lixiang-story-text {
+                font-size: 1.05rem; /* 稍微縮小內文 */
+                margin: 20px 0;
+                min-height: 60px;
+            }
+            .lixiang-btn {
+                padding: 14px 16px;
+                font-size: 1rem; /* 按鈕文字微調 */
+            }
         }
     `;
     document.head.appendChild(style);
@@ -174,7 +209,7 @@
         let htmlContent = `
             <h3>貍想教育創新學院 春季班</h3>
             <div id="lixiang-story-text">${node.text}</div>
-            <div id="lixiang-options-container"></div>
+            <div id="lixiang-options-container" class="lixiang-options-wrapper"></div>
         `;
         appContainer.innerHTML = htmlContent;
 
@@ -200,7 +235,6 @@
     }
 
     // 啟動遊戲
-    // 延遲一點點時間確保 DOM 完全準備好
     setTimeout(function() {
         if(appContainer) {
             renderNode("Start");
