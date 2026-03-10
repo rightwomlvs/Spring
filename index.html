@@ -1,0 +1,211 @@
+<div id="lixiang-game-app"></div>
+
+<script>
+(function() {
+    // === 遊戲設定與劇本 ===
+    const storyData = {
+        "Start": {
+            text: "歡迎來到貍想教育創新學院第十屆春季班！這是一趟為期半年的共學旅程。在進入六大共學圈之前，請先感受一下當下的自己：你現在最渴望的是向內安頓身心，還是向外創造真實的改變？",
+            opt1: { text: "向內尋求安頓與人際連結", target: "Node2" },
+            opt2: { text: "向外探索技能與創造產出", target: "Node3" }
+        },
+        "Node2": {
+            text: "面對充滿變動與張力的生活，你覺得最近最消耗你能量的是什麼？",
+            opt1: { text: "自身任務繁重，常常感到焦慮與緊繃", target: "Node4" },
+            opt2: { text: "與他人（學生、同事）溝通的摩擦與不理解", target: "Node5" }
+        },
+        "Node3": {
+            text: "說到創造與學習，哪一種情境會讓你眼睛一亮，充滿動力？",
+            opt1: { text: "掌握最新的 AI 科技與系統化工具", target: "Node6" },
+            opt2: { text: "設計一套有趣的課程或文化體驗活動", target: "Node7" }
+        },
+        "Node4": {
+            text: "當你需要為自己充電時，你傾向用哪種方式找回力量？",
+            opt1: { text: "獨處靜心，建立專屬自己的日常好習慣", target: "Node8" },
+            opt2: { text: "找一群懂你的人，在安全的空間裡傾吐交流", target: "Node9" }
+        },
+        "Node5": {
+            text: "當你遇到一位不按牌理出牌、難以溝通的夥伴或學生時，你的直覺反應是？",
+            opt1: { text: "想探究他背後是否有特殊的心理特質（如ADHD）", target: "Node10" },
+            opt2: { text: "想用一套情緒教育（SEL）的教材來引導他", target: "Node11" }
+        },
+        "Node6": {
+            text: "面對日新月異的科技工具，你最想把時間投資在哪裡？",
+            opt1: { text: "學習 AI 提示詞與遊戲化設計，打造敏捷工作流", target: "Node12" },
+            opt2: { text: "練習思維可視化，把複雜的資訊變簡單", target: "Node13" }
+        },
+        "Node7": {
+            text: "如果要你親自策劃一場體驗，你腦海中浮現的畫面是？",
+            opt1: { text: "帶領人群走入巷弄，來一場沉浸式的實地走讀", target: "Node13" },
+            opt2: { text: "坐在書桌前，把模糊的靈感變成一套跨域桌遊或教材原型", target: "Node14" }
+        },
+        "Node8": {
+            text: "知識學了很多，但日常卻做不到。你願意承諾和夥伴一起在清晨早起，進行連續 21 天的正念冥想或靜心書寫嗎？",
+            opt1: { text: "我願意！我需要這種互相督促的實踐", target: "BeaverEnd" },
+            opt2: { text: "早起有點困難，我比較想透過走讀去感受環境", target: "Node16" }
+        },
+        "Node9": {
+            text: "聽到同事在抱怨某個問題學生，你的心裡其實更想這麼做：",
+            opt1: { text: "創造一個不帶評判的空間，傾聽並同理彼此的耗損", target: "BearEnd" },
+            opt2: { text: "不如我們來設計一個有趣的戶外活動，讓他發洩精力", target: "Node14" }
+        },
+        "Node10": {
+            text: "你發現這位學生其實是需要特別的支持。你會希望如何幫助他？",
+            opt1: { text: "和社群夥伴一起研究案例，成為能真正接住他的人", target: "BearEnd" },
+            opt2: { text: "把他需要的引導步驟，開發成一款最小可行性產品（MVP）", target: "Node11" }
+        },
+        "Node11": {
+            text: "你的腦海中浮現了一個很棒的情緒教育（SEL）教材點子！接下來你打算怎麼做？",
+            opt1: { text: "和夥伴一起安全試錯，先把教案原型（MVP）產出並測試", target: "FishEnd" },
+            opt2: { text: "我想先用 AI 工具輔助我生成豐富的圖文素材", target: "Node12" }
+        },
+        "Node12": {
+            text: "AI 時代來臨，只要指令對了就能事半功倍。你想不想導入遊戲化思維，讓自己的產出效率如虎添翼？",
+            opt1: { text: "太想了！我要掌握 AI 協作與遊戲化設計", target: "DeerEnd" },
+            opt2: { text: "比起效率，我更想用新工具來向世界訴說臺灣的故事", target: "Node15" }
+        },
+        "Node13": {
+            text: "你成功將複雜的教育理念思維可視化了！下一步，你想把它應用在哪裡？",
+            opt1: { text: "把它變成一個實體走讀活動的路線圖", target: "Node14" },
+            opt2: { text: "加上 AI 輔助，製作成高質感的教學簡報包", target: "DeerEnd" }
+        },
+        "Node14": {
+            text: "實體的走讀活動除了內容，還需要強大的口語表達能力。你準備好接受 See Think Wonder 架構與口語表達的雙重訓練了嗎？",
+            opt1: { text: "沒問題！我想成為有感染力的活動實踐者", target: "DragonEnd" },
+            opt2: { text: "我口語比較害羞，想專注在背後的在地文史脈絡就好", target: "Node16" }
+        },
+        "Node15": {
+            text: "當你在設計這款體驗或遊戲時，你最希望傳遞的核心精神是？",
+            opt1: { text: "不卑不亢地展現臺灣在地文化，與國際接軌", target: "CowEnd" },
+            opt2: { text: "讓使用者在遊玩過程中，學會溝通與同理心", target: "FishEnd" }
+        },
+        "Node16": {
+            text: "漫步在巷弄，看著充滿故事的紅磚牆，你此刻的感悟是？",
+            opt1: { text: "每一塊磚都有歷史，我想把這份土地的認同感記錄下來", target: "CowEnd" },
+            opt2: { text: "這個空間的光影讓人感到平靜，我想記錄下這份身心的安頓", target: "BeaverEnd" }
+        },
+        "BeaverEnd": {
+            text: "【貍尾社群共築圈】歡迎加入！在這裡，我們不談生硬的大道理，而是透過晨間正念冥想與靜心書寫，陪伴彼此將青色組織的理念帶入日常。先把自己安頓好，才能在張力中看見更多可能。",
+            opt1: { text: "重新探索", target: "Start", isEnd: true }
+        },
+        "BearEnd": {
+            text: "【熊掌互助共融圈】歡迎加入！你有一顆溫柔且包容的心。在這裡，我們將透過真實案例探究，學習理解多樣的特質（如ADHD、ASD），不急著下評判，成為彼此最堅實的心理支持者。",
+            opt1: { text: "重新探索", target: "Start", isEnd: true }
+        },
+        "FishEnd": {
+            text: "【魚沫設計共學圈】歡迎加入！從零開始，安全試錯。我們將陪伴你把跨域教材與 SEL 情緒教育的點子，在充滿彈性的非同步協作中，一步步打造成專屬你的最小可行性產品（MVP）！",
+            opt1: { text: "重新探索", target: "Start", isEnd: true }
+        },
+        "DeerEnd": {
+            text: "【鹿角科技共享圈】歡迎加入！跟上時代的腳步，讓我們用 AI 協作與思維可視化武裝自己。透過共學遊戲化設計，你將建立屬於自己的敏捷工作流，在科技浪潮與教學備課中如虎添翼！",
+            opt1: { text: "重新探索", target: "Start", isEnd: true }
+        },
+        "CowEnd": {
+            text: "【牛耳認同共構圈】歡迎加入！越在地，越國際。我們將一起探究臺灣土地的故事，不流於觀光打卡，而是建立深厚的文化認同，並產出實體卡牌，搭起與國際教育交流的對話橋樑。",
+            opt1: { text: "重新探索", target: "Start", isEnd: true }
+        },
+        "DragonEnd": {
+            text: "【龍翼活動共創圈】歡迎加入！讓我們把教室無限延伸。在這裡你將學習 See Think Wonder 課程架構，設計好玩的活動式走讀教案，並透過實地演練，大幅提升口語表達的專業魅力！",
+            opt1: { text: "重新探索", target: "Start", isEnd: true }
+        }
+    };
+
+    // === 動態注入 CSS 樣式 ===
+    const style = document.createElement('style');
+    style.innerHTML = `
+        #lixiang-game-app {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, '微軟正黑體';
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 600px;
+            margin: 20px auto;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            color: #333;
+        }
+        #lixiang-game-app h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #edf2f7;
+            font-size: 1.5em;
+        }
+        #lixiang-story-text {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin: 25px 0;
+            min-height: 80px;
+        }
+        .lixiang-btn {
+            display: block;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            box-sizing: border-box;
+        }
+        .lixiang-btn:hover {
+            background-color: #45a049;
+        }
+        .lixiang-btn-restart {
+            background-color: #e53e3e;
+        }
+        .lixiang-btn-restart:hover {
+            background-color: #c53030;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // === 遊戲引擎邏輯 ===
+    const appContainer = document.getElementById('lixiang-game-app');
+    
+    function renderNode(nodeId) {
+        const node = storyData[nodeId];
+        
+        // 建立畫面
+        let htmlContent = `
+            <h3>貍想教育創新學院 春季班</h3>
+            <div id="lixiang-story-text">${node.text}</div>
+            <div id="lixiang-options-container"></div>
+        `;
+        appContainer.innerHTML = htmlContent;
+
+        const optionsContainer = document.getElementById('lixiang-options-container');
+
+        // 生成按鈕 1
+        if (node.opt1) {
+            const btn1 = document.createElement('button');
+            btn1.className = node.opt1.isEnd ? 'lixiang-btn lixiang-btn-restart' : 'lixiang-btn';
+            btn1.innerText = node.opt1.text;
+            btn1.onclick = function() { renderNode(node.opt1.target); };
+            optionsContainer.appendChild(btn1);
+        }
+
+        // 生成按鈕 2
+        if (node.opt2) {
+            const btn2 = document.createElement('button');
+            btn2.className = 'lixiang-btn';
+            btn2.innerText = node.opt2.text;
+            btn2.onclick = function() { renderNode(node.opt2.target); };
+            optionsContainer.appendChild(btn2);
+        }
+    }
+
+    // 啟動遊戲
+    // 延遲一點點時間確保 DOM 完全準備好
+    setTimeout(function() {
+        if(appContainer) {
+            renderNode("Start");
+        }
+    }, 50);
+
+})();
+</script>
