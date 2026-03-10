@@ -2,6 +2,17 @@
 
 <script>
 (function() {
+    // === 各圈層專屬顏色色號 (根據圖片擷取) ===
+    const colors = {
+        default: "#bde0ef",   // 豹笑機動共議圈 - 水藍色
+        beaver: "#f08b33",    // 貍尾 - 橘色
+        dragon: "#2e2e2e",    // 龍翼 - 黑色
+        fish: "#1352cf",      // 魚沫 - 藍色
+        deer: "#569c3a",      // 鹿角 - 綠色
+        cow: "#88009b",       // 牛耳 - 紫色
+        bear: "#794a20"       // 熊掌 - 棕色
+    };
+
     // === 遊戲設定與劇本 ===
     const storyData = {
         "Start": {
@@ -84,28 +95,42 @@
             opt1: { text: "每一塊磚都有歷史，我想把這份土地的認同感記錄下來", target: "CowEnd" },
             opt2: { text: "這個空間的光影讓人感到平靜，我想記錄下這份身心的安頓", target: "BeaverEnd" }
         },
+        
+        // === 結局節點 (加入專屬顏色與標題) ===
         "BeaverEnd": {
-            text: "【貍尾社群共築圈】歡迎加入！在這裡，我們不談生硬的大道理，而是透過晨間正念冥想與靜心書寫，陪伴彼此將青色組織的理念帶入日常。先把自己安頓好，才能在張力中看見更多可能。",
+            title: "貍尾社群共築圈",
+            themeColor: colors.beaver,
+            text: "歡迎加入！在這裡，我們不談生硬的大道理，而是透過晨間正念冥想與靜心書寫，陪伴彼此將青色組織的理念帶入日常。先把自己安頓好，才能在張力中看見更多可能。",
             opt1: { text: "重新探索", target: "Start", isEnd: true }
         },
         "BearEnd": {
-            text: "【熊掌互助共融圈】歡迎加入！你有一顆溫柔且包容的心。在這裡，我們將透過真實案例探究，學習理解多樣的特質（如ADHD、ASD），不急著下評判，成為彼此最堅實的心理支持者。",
+            title: "熊掌互助共融圈",
+            themeColor: colors.bear,
+            text: "歡迎加入！你有一顆溫柔且包容的心。在這裡，我們將透過真實案例探究，學習理解多樣的特質（如ADHD、ASD），不急著下評判，成為彼此最堅實的心理支持者。",
             opt1: { text: "重新探索", target: "Start", isEnd: true }
         },
         "FishEnd": {
-            text: "【魚沫設計共學圈】歡迎加入！從零開始，安全試錯。我們將陪伴你把跨域教材與 SEL 情緒教育的點子，在充滿彈性的非同步協作中，一步步打造成專屬你的最小可行性產品（MVP）！",
+            title: "魚沫設計共學圈",
+            themeColor: colors.fish,
+            text: "歡迎加入！從零開始，安全試錯。我們將陪伴你把跨域教材與 SEL 情緒教育的點子，在充滿彈性的非同步協作中，一步步打造成專屬你的最小可行性產品（MVP）！",
             opt1: { text: "重新探索", target: "Start", isEnd: true }
         },
         "DeerEnd": {
-            text: "【鹿角科技共享圈】歡迎加入！跟上時代的腳步，讓我們用 AI 協作與思維可視化武裝自己。透過共學遊戲化設計，你將建立屬於自己的敏捷工作流，在科技浪潮與教學備課中如虎添翼！",
+            title: "鹿角科技共享圈",
+            themeColor: colors.deer,
+            text: "歡迎加入！跟上時代的腳步，讓我們用 AI 協作與思維可視化武裝自己。透過共學遊戲化設計，你將建立屬於自己的敏捷工作流，在科技浪潮與教學備課中如虎添翼！",
             opt1: { text: "重新探索", target: "Start", isEnd: true }
         },
         "CowEnd": {
-            text: "【牛耳認同共構圈】歡迎加入！越在地，越國際。我們將一起探究臺灣土地的故事，不流於觀光打卡，而是建立深厚的文化認同，並產出實體卡牌，搭起與國際教育交流的對話橋樑。",
+            title: "牛耳認同共構圈",
+            themeColor: colors.cow,
+            text: "歡迎加入！越在地，越國際。我們將一起探究臺灣土地的故事，不流於觀光打卡，而是建立深厚的文化認同，並產出實體卡牌，搭起與國際教育交流的對話橋樑。",
             opt1: { text: "重新探索", target: "Start", isEnd: true }
         },
         "DragonEnd": {
-            text: "【龍翼活動共創圈】歡迎加入！讓我們把教室無限延伸。在這裡你將學習 See Think Wonder 課程架構，設計好玩的活動式走讀教案，並透過實地演練，大幅提升口語表達的專業魅力！",
+            title: "龍翼活動共創圈",
+            themeColor: colors.dragon,
+            text: "歡迎加入！讓我們把教室無限延伸。在這裡你將學習 See Think Wonder 課程架構，設計好玩的活動式走讀教案，並透過實地演練，大幅提升口語表達的專業魅力！",
             opt1: { text: "重新探索", target: "Start", isEnd: true }
         }
     };
@@ -118,82 +143,85 @@
             background-color: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
-            box-sizing: border-box; /* 避免 padding 撐破寬度 */
-            width: 92%; /* 預設適應父容器寬度，留邊界 */
-            max-width: 600px; /* 電腦版最大寬度限制 */
+            box-sizing: border-box;
+            width: 92%;
+            max-width: 600px;
             margin: 20px auto;
             padding: 30px;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
             color: #333;
+            overflow: hidden;
         }
-        #lixiang-game-app h3 {
-            color: #2c3e50;
-            margin-top: 0;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #edf2f7;
-            font-size: 1.5rem;
-            line-height: 1.4;
+        #lixiang-game-title {
+            margin: -30px -30px 20px -30px; /* 讓底色填滿頂部 */
+            padding: 20px 15px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
         #lixiang-story-text {
             font-size: 1.15rem;
             line-height: 1.6;
-            margin: 25px 0;
+            margin: 30px 0;
             min-height: 80px;
-            word-wrap: break-word; /* 防止長單字破版 */
+            word-wrap: break-word;
         }
         .lixiang-options-wrapper {
             display: flex;
             flex-direction: column;
-            gap: 12px; /* 按鈕間的呼吸空間 */
+            gap: 12px;
         }
         .lixiang-btn {
             display: block;
             width: 100%;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 16px 20px; /* 加大高度，方便手指點擊 */
+            background-color: #f1f5f9;
+            color: #334155;
+            border: 2px solid #e2e8f0;
+            padding: 16px 20px;
             border-radius: 8px;
             font-size: 1.05rem;
+            font-weight: bold;
             line-height: 1.4;
             cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.1s ease;
+            transition: all 0.2s ease;
             box-sizing: border-box;
-            white-space: normal; /* 允許過長文字自動換行 */
+            white-space: normal;
         }
         .lixiang-btn:hover {
-            background-color: #45a049;
+            background-color: #e2e8f0;
+            border-color: #cbd5e1;
         }
         .lixiang-btn:active {
-            transform: scale(0.98); /* 手機點擊時的下壓微回饋 */
+            transform: scale(0.98);
         }
+        /* 結果頁重新開始按鈕樣式 */
         .lixiang-btn-restart {
-            background-color: #e53e3e;
+            color: white;
+            border: none;
         }
         .lixiang-btn-restart:hover {
-            background-color: #c53030;
+            opacity: 0.9;
+            transform: translateY(-2px);
         }
 
-        /* --- 手機版專屬響應式調整 (Media Query) --- */
+        /* --- 手機版響應式微調 --- */
         @media screen and (max-width: 480px) {
             #lixiang-game-app {
-                width: 95%; /* 手機上進一步放大佔比 */
-                padding: 20px 15px; /* 縮小內部留白 */
-                margin: 15px auto;
+                width: 95%;
+                padding: 25px 20px;
             }
-            #lixiang-game-app h3 {
-                font-size: 1.35rem; /* 稍微縮小標題 */
-                padding-bottom: 12px;
+            #lixiang-game-title {
+                margin: -25px -20px 20px -20px;
+                font-size: 1.25rem;
             }
             #lixiang-story-text {
-                font-size: 1.05rem; /* 稍微縮小內文 */
+                font-size: 1.05rem;
                 margin: 20px 0;
-                min-height: 60px;
             }
             .lixiang-btn {
                 padding: 14px 16px;
-                font-size: 1rem; /* 按鈕文字微調 */
+                font-size: 1rem;
             }
         }
     `;
@@ -205,9 +233,17 @@
     function renderNode(nodeId) {
         const node = storyData[nodeId];
         
+        // 判斷是否為結局頁，決定表頭標題與顏色
+        const currentTitle = node.title || "豹笑機動共議圈";
+        const themeColor = node.themeColor || colors.default;
+        // 如果是豹笑的水藍色，字體用深色較好閱讀；如果是結局的深色，字體用白色
+        const titleTextColor = node.themeColor ? "#ffffff" : "#1a4a6b";
+
         // 建立畫面
         let htmlContent = `
-            <h3>貍想教育創新學院 春季班</h3>
+            <div id="lixiang-game-title" style="background-color: ${themeColor}; color: ${titleTextColor};">
+                ${currentTitle}
+            </div>
             <div id="lixiang-story-text">${node.text}</div>
             <div id="lixiang-options-container" class="lixiang-options-wrapper"></div>
         `;
@@ -220,6 +256,12 @@
             const btn1 = document.createElement('button');
             btn1.className = node.opt1.isEnd ? 'lixiang-btn lixiang-btn-restart' : 'lixiang-btn';
             btn1.innerText = node.opt1.text;
+            
+            // 如果是結局的重新開始按鈕，套用該圈層的專屬顏色
+            if (node.opt1.isEnd) {
+                btn1.style.backgroundColor = themeColor;
+            }
+            
             btn1.onclick = function() { renderNode(node.opt1.target); };
             optionsContainer.appendChild(btn1);
         }
